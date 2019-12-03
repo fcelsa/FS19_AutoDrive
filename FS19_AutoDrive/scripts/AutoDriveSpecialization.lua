@@ -129,7 +129,7 @@ function AutoDrive:onPostLoad(savegame)
     -- Creating a new transform on front of the vehicle
     self.ad.frontNode = createTransformGroup(self:getName() .. "_frontNode")
     link(self.components[1].node, self.ad.frontNode)
-    setTranslation(self.ad.frontNode, 0, 0, self.sizeLength / 2 + self.lengthOffset + 1.5)
+    setTranslation(self.ad.frontNode, 0, 0, self.sizeLength / 2 + self.lengthOffset + 0.75)
     self.ad.frontNodeGizmo = DebugGizmo:new()
 end
 
@@ -592,7 +592,11 @@ function AutoDrive:onDrawControlledVehicle(vehicle)
 end
 
 function AutoDrive:onDrawCreationMode(vehicle)
-    local x1, y1, z1 = getWorldTranslation(vehicle.ad.frontNode)
+    local startNode = vehicle.ad.frontNode
+    if AutoDrive.getSetting("autoConnectStart") then
+        startNode = vehicle.components[1].node
+    end
+    local x1, y1, z1 = getWorldTranslation(startNode)
 
     AutoDrive.drawPointsInProximity(vehicle)
 
